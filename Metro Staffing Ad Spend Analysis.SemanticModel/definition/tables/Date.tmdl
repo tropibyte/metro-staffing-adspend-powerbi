@@ -1,0 +1,118 @@
+table Date
+	lineageTag: c74a5e0e-9574-590d-b8be-e83602388810
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-mm-dd
+		lineageTag: be48ba27-a8df-5d12-b007-50c548d20e22
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Day
+		dataType: int64
+		lineageTag: c0e2028f-4432-5dcb-b119-52a7b48c1bf2
+		summarizeBy: none
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Label'
+		dataType: string
+		lineageTag: dea28b2e-6471-581f-838d-9be620f62094
+		summarizeBy: none
+		sourceColumn: Day Label
+		sortByColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Weekday Number'
+		dataType: int64
+		isHidden
+		lineageTag: 3dbbf81b-0df0-57e4-8102-c833181143ae
+		summarizeBy: none
+		sourceColumn: Weekday Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekday
+		dataType: string
+		lineageTag: f3699a9c-b530-5629-ba08-2de8c9f7abbd
+		summarizeBy: none
+		sourceColumn: Weekday
+		sortByColumn: 'Weekday Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Type'
+		dataType: string
+		lineageTag: ef7ae53e-4f50-5854-a6a7-432ec47fb2cd
+		summarizeBy: none
+		sourceColumn: Day Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Start'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 7654e439-9e2b-5d98-9d13-57222d79b7d3
+		summarizeBy: none
+		sourceColumn: Week Start
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Week Number'
+		dataType: int64
+		isHidden
+		lineageTag: ec1d57b2-c653-5497-8289-9158043ac484
+		summarizeBy: none
+		sourceColumn: Week Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week
+		dataType: string
+		lineageTag: f584ee91-acf9-5663-a301-9110e165a5b2
+		summarizeBy: none
+		sourceColumn: Week
+		sortByColumn: 'Week Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = m
+		mode: import
+		queryGroup: Data
+		source =
+				let
+				    First   = List.Min(Jobs[Date]),
+				    Last    = List.Max(Jobs[Date]),
+				    // Pad out to whole Monday-start weeks so weekly buckets are never partial.
+				    WeekOne = Date.StartOfWeek(First, Day.Monday),
+				    WeekEnd = Date.EndOfWeek(Last, Day.Monday),
+				    Days    = List.Dates(WeekOne, Duration.Days(WeekEnd - WeekOne) + 1, #duration(1, 0, 0, 0)),
+				    Base    = Table.FromList(Days, Splitter.SplitByNothing(), {"Date"}),
+				    Typed   = Table.TransformColumnTypes(Base, {{"Date", type date}}),
+				
+				    AddDay      = Table.AddColumn(Typed, "Day", each Date.Day([Date]), Int64.Type),
+				    AddLabel    = Table.AddColumn(AddDay, "Day Label", each Date.ToText([Date], [Format = "MMM dd", Culture = "en-US"]), type text),
+				    AddDowNum   = Table.AddColumn(AddLabel, "Weekday Number", each Date.DayOfWeek([Date], Day.Monday) + 1, Int64.Type),
+				    AddDow      = Table.AddColumn(AddDowNum, "Weekday", each Date.ToText([Date], [Format = "ddd", Culture = "en-US"]), type text),
+				    AddType     = Table.AddColumn(AddDow, "Day Type", each if [Weekday Number] >= 6 then "Weekend" else "Weekday", type text),
+				    AddWkStart  = Table.AddColumn(AddType, "Week Start", each Date.StartOfWeek([Date], Day.Monday), type date),
+				    AddWkIndex  = Table.AddColumn(AddWkStart, "Week Number",
+				                      each Duration.Days([Week Start] - WeekOne) / 7 + 1, Int64.Type),
+				    AddWkLabel  = Table.AddColumn(AddWkIndex, "Week",
+				                      each "Week " & Text.From([Week Number]) & " ("
+				                           & Date.ToText([Week Start], [Format = "MMM dd", Culture = "en-US"]) & ")", type text)
+				in
+				    AddWkLabel
+
+	annotation PBI_ResultType = Table
+

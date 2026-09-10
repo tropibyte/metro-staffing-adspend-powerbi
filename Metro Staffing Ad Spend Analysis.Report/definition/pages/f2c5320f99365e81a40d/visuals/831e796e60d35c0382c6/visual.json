@@ -1,0 +1,293 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "831e796e60d35c0382c6",
+  "position": {
+    "x": 652,
+    "y": 418,
+    "width": 612,
+    "height": 286,
+    "z": 900,
+    "tabOrder": 900
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "What these three visuals say",
+                    "textStyle": {
+                      "fontSize": "11.0pt",
+                      "color": "#2C5F8D",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "▪  ",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#2C5F8D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Ad spend by vendor: Metro Staffing put 96.5% of January's $47,543 through two vendors — Awesome Jobs at $31,255 (65.7%) and Job Inc at $14,600 (30.7%).",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#16232E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "▪  ",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#2C5F8D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Share of applications by vendor: the return does not follow the money. Awesome Jobs produced 87.6% of the 12,885 applications; Job Inc produced 10.4% — a 20-point efficiency gap.",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#16232E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "▪  ",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#2C5F8D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Vendor scorecard: Job Inc costs $10.94 per application against Awesome Jobs' $2.77, and its $2.68 cost per click is 11x higher because it bills a flat ~$471 every single day of the month instead of charging per click.",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#16232E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt",
+                      "color": "#16232E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Why this matters to Metro Staffing:  ",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#C0483F",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "vendor choice, not budget size, is the largest single lever on hiring volume. Re-pointing Job Inc's $14,600 at performance-priced inventory at the $2.77 benchmark buys roughly 5,273 applications rather than 1,335 — about 3,938 more applications for identical spend.",
+                    "textStyle": {
+                      "fontSize": "9.5pt",
+                      "color": "#16232E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DCE3EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BottomRight'"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8C9BAA'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "80L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "12L"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

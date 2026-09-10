@@ -1,0 +1,239 @@
+table Jobs
+	lineageTag: c1587e57-260f-5cf5-85be-46369bbde555
+
+	/// Total advertising dollars spent.
+	measure 'Total Spend' = SUM ( Jobs[Spend] )
+		formatString: "$"#,0.00
+		displayFolder: 1 Volume
+		lineageTag: ab3069b9-b83e-58bb-b44b-d202cdcc5108
+
+	/// Total clicks delivered against Metro Staffing job adverts.
+	measure 'Total Clicks' = SUM ( Jobs[Clicks] )
+		formatString: #,0
+		displayFolder: 1 Volume
+		lineageTag: bcb39988-1f99-5bf6-b984-cc602b8c0c24
+
+	/// Total completed applications.
+	measure 'Total Applies' = SUM ( Jobs[Applies] )
+		formatString: #,0
+		displayFolder: 1 Volume
+		lineageTag: ec2facbc-ad0b-5be3-aa17-4a15a19adb2b
+
+	/// Distinct requisitions advertised.
+	measure 'Jobs Advertised' = DISTINCTCOUNT ( Jobs[Req Num] )
+		formatString: #,0
+		displayFolder: 1 Volume
+		lineageTag: faf3ff51-02d7-5b66-99da-2f03beb72933
+
+	/// Blended cost per click: total spend divided by total clicks. Correct at every grain, unlike
+	/// averaging the workbook's row-level CPC.
+	measure CPC = DIVIDE ( [Total Spend], [Total Clicks] )
+		formatString: "$"#,0.000
+		displayFolder: 2 Efficiency
+		lineageTag: 7e41ebf2-8d2e-5928-b9a1-4660fc76542d
+
+	/// Blended cost per application: total spend divided by total applications.
+	measure CPA = DIVIDE ( [Total Spend], [Total Applies] )
+		formatString: "$"#,0.00
+		displayFolder: 2 Efficiency
+		lineageTag: 27cb0919-1646-5990-9e41-28f986955ccb
+
+	/// Share of clicks that convert into a completed application.
+	measure 'Apply Rate' = DIVIDE ( [Total Applies], [Total Clicks] )
+		formatString: 0.0%
+		displayFolder: 2 Efficiency
+		lineageTag: 56c626d1-5d62-5c03-b7a8-d8fb16633814
+
+	/// This slice's share of the spend visible in the visual.
+	measure 'Spend Share' = DIVIDE ( [Total Spend], CALCULATE ( [Total Spend], ALLSELECTED () ) )
+		formatString: 0.0%
+		displayFolder: 3 Allocation
+		lineageTag: e91775f0-b802-56f6-9650-2647e94de019
+
+	/// This slice's share of the applications visible in the visual.
+	measure 'Apply Share' = DIVIDE ( [Total Applies], CALCULATE ( [Total Applies], ALLSELECTED () ) )
+		formatString: 0.0%
+		displayFolder: 3 Allocation
+		lineageTag: fdaa377f-0cf3-50a5-b3e0-c6894580dad6
+
+	/// Apply share minus spend share, in percentage points. Positive means the slice returns more
+	/// applications than the budget it consumes; negative means it is over-funded.
+	measure 'Efficiency Gap' = [Apply Share] - [Spend Share]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 3 Allocation
+		lineageTag: c3c5bac8-a2ea-54bb-9cb3-10d5dd0a58c6
+
+	/// The lowest cost per application achieved by any vendor that actually charged for traffic,
+	/// evaluated inside the current slicer context. Used as the reallocation target.
+	measure 'Benchmark CPA' =
+			VAR _ByVendor =
+			    ADDCOLUMNS (
+			        CALCULATETABLE ( VALUES ( Jobs[Vendors] ), REMOVEFILTERS ( Jobs[Vendors] ) ),
+			        "@Spend", CALCULATE ( SUM ( Jobs[Spend] ) ),
+			        "@Applies", CALCULATE ( SUM ( Jobs[Applies] ) )
+			    )
+			VAR _Paid =
+			    FILTER ( _ByVendor, [@Spend] > 0 && [@Applies] > 0 )
+			RETURN
+			    MINX ( _Paid, DIVIDE ( [@Spend], [@Applies] ) )
+		formatString: "$"#,0.00
+		displayFolder: 4 Reallocation Model
+		lineageTag: e031a214-0cfe-510c-adf5-fdaebc7a39b7
+
+	/// Applications the same budget would buy at the benchmark cost per application.
+	measure 'Applies at Benchmark CPA' = DIVIDE ( [Total Spend], [Benchmark CPA] )
+		formatString: #,0
+		displayFolder: 4 Reallocation Model
+		lineageTag: 7c8ccb30-6157-520b-9cb3-69f8ab7acc17
+
+	/// Applications lost by buying at the current cost per application instead of the benchmark. This
+	/// is the size of the reallocation prize.
+	measure 'Applications Forgone' = MAX ( 0, [Applies at Benchmark CPA] - [Total Applies] )
+		formatString: #,0
+		displayFolder: 4 Reallocation Model
+		lineageTag: e5604d2f-beae-5928-a34f-11318af2734b
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 1b165907-6657-5b92-83e1-c0834e635850
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Title
+		dataType: string
+		lineageTag: b5331373-9d78-55bd-9bb9-19b9d953e468
+		summarizeBy: none
+		sourceColumn: Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 21c08f31-7ff2-55f7-a91f-b274f8f9bfd7
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 38f6ce36-781e-555f-8d89-8799de2bd5f1
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 5aa5fc80-b2c3-550d-b3be-8110c50343df
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employer
+		dataType: string
+		lineageTag: f5320559-ed91-5d8a-9747-33a3b1155c0f
+		summarizeBy: none
+		sourceColumn: Employer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 79648e89-f6de-5113-8207-252ee88a70e7
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Req Num'
+		dataType: string
+		lineageTag: 153b2c90-c3d1-5adc-97da-f781734d665b
+		summarizeBy: none
+		sourceColumn: Req Num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vendors
+		dataType: string
+		lineageTag: 3e678468-cfe4-51e5-a2f5-5c68d529bf13
+		summarizeBy: none
+		sourceColumn: Vendors
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clicks
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7349192c-b8be-5c16-94d6-62ccda8207e9
+		summarizeBy: sum
+		sourceColumn: Clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column Applies
+		dataType: int64
+		formatString: #,0
+		lineageTag: cd86a962-4e12-5eaf-be20-24c4d269e8f3
+		summarizeBy: sum
+		sourceColumn: Applies
+
+		annotation SummarizationSetBy = Automatic
+
+	column Spend
+		dataType: double
+		formatString: "$"#,0.00
+		lineageTag: bc22f335-6103-5bee-924e-a41051c738cf
+		summarizeBy: sum
+		sourceColumn: Spend
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Jobs = m
+		mode: import
+		queryGroup: Data
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourceFile), null, true),
+				    Sheet  = Source{[Item = "Ouput", Kind = "Sheet"]}[Data],
+				    Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars = true]),
+				
+				    // Drop the workbook's row-level CPA / CPC columns. They are per-row ratios and
+				    // averaging them across rows understates cost; CPA and CPC are re-derived as
+				    // DAX measures (total spend / total applies) so they stay correct at every grain.
+				    DropRatios = Table.RemoveColumns(Headers, {"CPA", "CPC"}),
+				
+				    // Trailing blank rows in the sheet's used range.
+				    DropBlanks = Table.SelectRows(DropRatios, each [Req Num] <> null and [Date] <> null),
+				
+				    Typed = Table.TransformColumnTypes(
+				        DropBlanks,
+				        {
+				            {"Date", type date}, {"Title", type text}, {"City", type text},
+				            {"State", type text}, {"Country", type text}, {"Employer", type text},
+				            {"Category", type text}, {"Req Num", type text}, {"Vendors", type text},
+				            {"Clicks", Int64.Type}, {"Applies", Int64.Type}, {"Spend", type number}
+				        }
+				    ),
+				
+				    // DATA INTEGRITY: 99 placeholder rows carry Title = "Unknown Jobs" with
+				    // City and Category = "_not_specified_". They hold 3,578 applications against
+				    // zero clicks and zero spend, so they are unattributable and are removed here
+				    // rather than filtered per-visual. This keeps every visual free of them.
+				    Cleaned = Table.SelectRows(
+				        Typed,
+				        each [Category] <> "_not_specified_"
+				            and [City] <> "_not_specified_"
+				            and [Title] <> "Unknown Jobs"
+				    )
+				in
+				    Cleaned
+
+	annotation PBI_ResultType = Table
+

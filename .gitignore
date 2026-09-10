@@ -1,0 +1,22 @@
+# Power BI per-user state and local data cache (not part of the report definition)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Power BI scratch
+*.pbix.bak
+**/TempSaves/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Schema cache downloaded by tools/validate.py (Microsoft-published, fetched on demand)
+schema_cache/

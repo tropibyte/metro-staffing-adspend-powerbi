@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Metro Staffing Ad Spend Analysis"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c2818f02-9b9b-50d9-aeac-ff7a512e2ff5"
+  }
+}
