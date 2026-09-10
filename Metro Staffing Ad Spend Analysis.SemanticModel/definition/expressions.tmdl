@@ -1,4 +1,4 @@
-expression SourceFile = "C:\Users\tarie\ClaudeSession\MetroStaffing-PowerBI\Data\job-cloud-output-jan-2019.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+expression SourceFile = "C:\Users\tarie\source\repos\Woolf\metro-staffing-adspend-powerbi\Data\job-cloud-output-jan-2019.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	lineageTag: 92c8e00f-83b6-520f-a495-9ba1ef940743
 	queryGroup: Parameters
 

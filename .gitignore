@@ -20,3 +20,6 @@ Desktop.ini
 
 # Schema cache downloaded by tools/validate.py (Microsoft-published, fetched on demand)
 schema_cache/
+
+# Submission archive (built from the tracked tree by git archive)
+*.zip
